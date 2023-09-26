@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import './App.css';
 
 function App() {
@@ -6,37 +6,38 @@ function App() {
     const [answer, setAnswer] = useState('');
     const [isCorrect, setIsCorrect] = useState(null);
 
+    const ws = useMemo(() => new WebSocket('ws://localhost:3001'), []);
+
     useEffect(() => {
-        // Connect to the WebSocket server
-        const ws = new WebSocket('ws://localhost:3001');
+        ws.onopen = () => {
+            // WebSocket connection is established.
+            // Now you can send and receive messages.
+            console.log('WebSocket connection established.');
 
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.type === 'question') {
-                setQuestion(data.data);
-                setIsCorrect(null); // Clear previous answer status
-            }
-        };
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.type === 'question') {
+                    setQuestion(data.data);
+                    setIsCorrect(null); // Clear previous answer status
+                } else if (data.type === 'answerResult') {
+                    const { isCorrect } = data.data;
+                    setIsCorrect(isCorrect);
+                }
+            };
 
-        // Cleanup when unmounting
-        return () => {
-            ws.close();
+            // Cleanup when unmounting
+            return () => {
+                ws.close();
+            };
         };
-    }, []);
+    }, [ws]);
 
     const handleAnswerSubmit = () => {
-        // Send the selected answer to the server
-        const ws = new WebSocket('ws://localhost:3001');
-        ws.onopen = () => {
-            ws.send(JSON.stringify({ type: 'answer', answer }));
-        };
+        // Add a console.log statement to check if this function is being called
+        console.log('Submitting answer:', answer);
 
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.type === 'answerResult') {
-                setIsCorrect(data.data.isCorrect);
-            }
-        };
+        // Send the selected answer to the server
+        ws.send(JSON.stringify({ type: 'answer', answer }));
     };
 
     return (
