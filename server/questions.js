@@ -32,10 +32,8 @@ const triviaQuestions = [
 ];
 
 function getRandomQuestion() {
-    // Generate a random index within the range of the questions array
     const randomIndex = Math.floor(Math.random() * triviaQuestions.length);
 
-    // Return the randomly selected question
     return triviaQuestions[randomIndex];
 }
 

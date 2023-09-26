@@ -10,22 +10,19 @@ function App() {
 
     useEffect(() => {
         ws.onopen = () => {
-            // WebSocket connection is established.
-            // Now you can send and receive messages.
             console.log('WebSocket connection established.');
 
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 if (data.type === 'question') {
                     setQuestion(data.data);
-                    setIsCorrect(null); // Clear previous answer status
+                    setIsCorrect(null);
                 } else if (data.type === 'answerResult') {
                     const { isCorrect } = data.data;
                     setIsCorrect(isCorrect);
                 }
             };
 
-            // Cleanup when unmounting
             return () => {
                 ws.close();
             };
@@ -33,10 +30,8 @@ function App() {
     }, [ws]);
 
     const handleAnswerSubmit = () => {
-        // Add a console.log statement to check if this function is being called
         console.log('Submitting answer:', answer);
 
-        // Send the selected answer to the server
         ws.send(JSON.stringify({ type: 'answer', answer }));
     };
 
