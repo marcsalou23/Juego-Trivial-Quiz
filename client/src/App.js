@@ -5,6 +5,7 @@ function App() {
     const [question, setQuestion] = useState(null);
     const [answer, setAnswer] = useState('');
     const [isCorrect, setIsCorrect] = useState(null);
+    const [showResult, setShowResult] = useState(false);
 
     const ws = useMemo(() => new WebSocket('ws://localhost:3001'), []);
 
@@ -17,9 +18,7 @@ function App() {
                 if (data.type === 'question') {
                     setQuestion(data.data);
                     setIsCorrect(null);
-                } else if (data.type === 'answerResult') {
-                    const { isCorrect } = data.data;
-                    setIsCorrect(isCorrect);
+                    setShowResult(false);
                 }
             };
 
@@ -34,6 +33,18 @@ function App() {
 
         ws.send(JSON.stringify({ type: 'answer', answer }));
     };
+
+    useEffect(() => {
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'answerResult') {
+                const { isCorrect } = data.data;
+                setIsCorrect(isCorrect);
+                setShowResult(true);
+                setAnswer('');
+            }
+        };
+    }, [ws]);
 
     return (
         <div className='App'>
@@ -57,7 +68,7 @@ function App() {
                         ))}
                     </ul>
                     <button onClick={handleAnswerSubmit}>Submit Answer</button>
-                    {isCorrect !== null && (
+                    {showResult && isCorrect !== null && (
                         <p>{isCorrect ? 'Correct!' : 'Incorrect!'}</p>
                     )}
                 </>
