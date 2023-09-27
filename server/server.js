@@ -12,7 +12,13 @@ let currentQuestion = getRandomQuestion();
 wss.on('connection', (ws) => {
     console.log('Client connected');
 
-    ws.send(JSON.stringify({ type: 'question', data: currentQuestion }));
+    // Function to send a new question to the client
+    function sendQuestion() {
+        currentQuestion = getRandomQuestion();
+        ws.send(JSON.stringify({ type: 'question', data: currentQuestion }));
+    }
+
+    sendQuestion(); // Send the initial question upon connection
 
     ws.on('message', (message) => {
         const parsedMessage = JSON.parse(message);
@@ -21,9 +27,16 @@ wss.on('connection', (ws) => {
             const correctAnswer = currentQuestion.correctAnswer;
             const isCorrect = submittedAnswer === correctAnswer;
 
+            console.log('Submitted Answer:', submittedAnswer);
+            console.log('Correct Answer:', correctAnswer);
+            console.log('Is Correct:', isCorrect);
+
             ws.send(
                 JSON.stringify({ type: 'answerResult', data: { isCorrect } })
             );
+
+            // Send a new question after handling the answer
+            sendQuestion();
         }
     });
 
