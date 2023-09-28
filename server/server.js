@@ -17,8 +17,6 @@ wss.on('connection', (ws) => {
         ws.send(JSON.stringify({ type: 'question', data: currentQuestion }));
     }
 
-    sendQuestion();
-
     ws.on('message', async (message) => {
         const parsedMessage = JSON.parse(message);
         if (parsedMessage.type === 'answer') {
@@ -35,14 +33,16 @@ wss.on('connection', (ws) => {
             ws.send(
                 JSON.stringify({ type: 'answerResult', data: { isCorrect } })
             );
-
-            setTimeout(sendQuestion, 100);
+        } else if (parsedMessage.type === 'nextQuestion') {
+            sendQuestion();
         }
     });
 
     ws.on('close', () => {
         console.log('Client disconnected');
     });
+
+    sendQuestion();
 });
 
 server.listen(3001, () => {

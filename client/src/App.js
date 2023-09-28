@@ -19,6 +19,10 @@ function App() {
                     setQuestion(data.data);
                     setIsCorrect(null);
                     setShowResult(false);
+                } else if (data.type === 'answerResult') {
+                    const { isCorrect } = data.data;
+                    setIsCorrect(isCorrect);
+                    setShowResult(true);
                 }
             };
 
@@ -28,23 +32,16 @@ function App() {
         };
     }, [ws]);
 
-    const handleAnswerSubmit = () => {
+    const handleAnswerSubmit = (event) => {
         console.log('Submitting answer:', answer);
-
+        event.preventDefault();
         ws.send(JSON.stringify({ type: 'answer', answer }));
     };
 
-    useEffect(() => {
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.type === 'answerResult') {
-                const { isCorrect } = data.data;
-                setIsCorrect(isCorrect);
-                setShowResult(true);
-                setAnswer('');
-            }
-        };
-    }, [ws]);
+    const handleNextQuestion = () => {
+        setAnswer('');
+        ws.send(JSON.stringify({ type: 'nextQuestion' }));
+    };
 
     return (
         <div className='App'>
@@ -68,6 +65,7 @@ function App() {
                         ))}
                     </ul>
                     <button onClick={handleAnswerSubmit}>Submit Answer</button>
+                    <button onClick={handleNextQuestion}>Next Question</button>
                     {showResult && isCorrect !== null && (
                         <p>{isCorrect ? 'Correct!' : 'Incorrect!'}</p>
                     )}
