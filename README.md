@@ -5,8 +5,8 @@ This is a Trivia Quiz App that allows users to answer random trivia questions. T
 ## Features
 
 - Random trivia questions: The app fetches the questions from the build-in server
-- Timer: Each question has a timer, and users must answer within the given time limit.
-- Score tracking: Users can see their current score and track their progress as they answer questions.
+- Timer: Each question has a timer, and users must answer within the given time limit. (In progress)
+- Score tracking: Users can see their current score and track their progress as they answer questions. (In progress)
  
 ## Technologies Used
 
@@ -14,5 +14,5 @@ This is a Trivia Quiz App that allows users to answer random trivia questions. T
 - **Back-end**: Node.js
 - **Styling**: CSS and Bootstrap
 - **Routing**: React Router
-- **HTTP Requests**: Axios
+- **HTTP Requests**: WebSocket
 
