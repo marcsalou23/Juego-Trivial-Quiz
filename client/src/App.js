@@ -9,6 +9,8 @@ function App() {
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(0);
     const [hasAnswered, setHasAnswered] = useState(false);
+    const totalQuestions = 50;
+    const [answeredQuestions, setAnsweredQuestions] = useState(0);
     let timer;
 
     const ws = useMemo(() => new WebSocket('ws://localhost:3001'), []);
@@ -35,6 +37,10 @@ function App() {
                         if (isCorrect) {
                             setScore((prevScore) => prevScore + 1);
                         }
+
+                        setAnsweredQuestions(
+                            (prevAnswered) => prevAnswered + 1
+                        );
 
                         clearInterval(timer);
                     }
@@ -83,9 +89,9 @@ function App() {
         <div className='App'>
             {question ? (
                 <>
-                    <h1 className='quiz-title'>Trivia Quiz</h1>
+                    <h1 className='quiz-title'>Trivial Quiz</h1>
                     <p>{question.text}</p>
-                    <p>Time Left: {timeLeft} seconds</p>
+                    <p>Tiempo restante: {timeLeft} seconds</p>
                     <ul>
                         {question.options.map((option, index) => (
                             <li key={index}>
@@ -113,7 +119,10 @@ function App() {
                             {isCorrect ? 'Correcto!' : 'Incorrecto!'}
                         </p>
                     )}
-                    <p>Score: {score}</p>
+                    <p>Marcador: {score}</p>
+                    <p>
+                        Preguntas: {answeredQuestions}/{totalQuestions}
+                    </p>
                 </>
             ) : (
                 <p>Esperando siguiente pregunta...</p>
