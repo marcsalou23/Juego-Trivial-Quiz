@@ -64,14 +64,18 @@ function App() {
                             </li>
                         ))}
                     </ul>
-                    <button onClick={handleAnswerSubmit}>Submit Answer</button>
-                    <button onClick={handleNextQuestion}>Next Question</button>
+                    <button onClick={handleAnswerSubmit}>
+                        Enviar Respuesta
+                    </button>
+                    <button onClick={handleNextQuestion}>
+                        Siguiente Pregunta
+                    </button>
                     {showResult && isCorrect !== null && (
-                        <p>{isCorrect ? 'Correct!' : 'Incorrect!'}</p>
+                        <p>{isCorrect ? 'Correcto!' : 'Incorrecto!'}</p>
                     )}
                 </>
             ) : (
-                <p>Waiting for a question...</p>
+                <p>Esperando siguiente pregunta...</p>
             )}
         </div>
     );
