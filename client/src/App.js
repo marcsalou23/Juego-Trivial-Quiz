@@ -6,49 +6,86 @@ function App() {
     const [answer, setAnswer] = useState('');
     const [isCorrect, setIsCorrect] = useState(null);
     const [showResult, setShowResult] = useState(false);
+    const [score, setScore] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(0);
+    const [hasAnswered, setHasAnswered] = useState(false);
+    let timer;
 
     const ws = useMemo(() => new WebSocket('ws://localhost:3001'), []);
 
     useEffect(() => {
-        ws.onopen = () => {
-            console.log('WebSocket connection established.');
+        if (ws) {
+            ws.onopen = () => {
+                console.log('WebSocket connection established.');
 
-            ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                if (data.type === 'question') {
-                    setQuestion(data.data);
-                    setIsCorrect(null);
-                    setShowResult(false);
-                } else if (data.type === 'answerResult') {
-                    const { isCorrect } = data.data;
-                    setIsCorrect(isCorrect);
-                    setShowResult(true);
-                }
+                ws.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'question') {
+                        setQuestion(data.data);
+                        setIsCorrect(null);
+                        setShowResult(false);
+                        setTimeLeft(30);
+                        setHasAnswered(false);
+                    } else if (data.type === 'answerResult' && !hasAnswered) {
+                        const { isCorrect } = data.data;
+                        setIsCorrect(isCorrect);
+                        setShowResult(true);
+                        setHasAnswered(true);
+
+                        if (isCorrect) {
+                            setScore((prevScore) => prevScore + 1);
+                        }
+
+                        clearInterval(timer);
+                    }
+                };
+
+                return () => {
+                    ws.close();
+                };
             };
+        }
+    }, [ws, hasAnswered, score]);
 
-            return () => {
-                ws.close();
-            };
-        };
-    }, [ws]);
-
-    const handleAnswerSubmit = (event) => {
-        console.log('Submitting answer:', answer);
-        event.preventDefault();
-        ws.send(JSON.stringify({ type: 'answer', answer }));
+    const handleAnswerSubmit = () => {
+        if (ws) {
+            ws.send(JSON.stringify({ type: 'answer', answer }));
+        }
     };
 
     const handleNextQuestion = () => {
-        setAnswer('');
-        ws.send(JSON.stringify({ type: 'nextQuestion' }));
+        if (ws) {
+            setAnswer('');
+            ws.send(JSON.stringify({ type: 'nextQuestion' }));
+            setHasAnswered(false);
+        }
     };
+
+    useEffect(() => {
+        if (question && !hasAnswered) {
+            const timeLimit = 30;
+
+            timer = setInterval(() => {
+                if (timeLeft > 0) {
+                    setTimeLeft(timeLeft - 1);
+                } else {
+                    handleAnswerSubmit();
+                }
+            }, 1000);
+        }
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, [question, timeLeft, hasAnswered]);
 
     return (
         <div className='App'>
             {question ? (
                 <>
-                    <h1>Trivia Quiz</h1>
+                    <h1 className='quiz-title'>Trivia Quiz</h1>
                     <p>{question.text}</p>
+                    <p>Time Left: {timeLeft} seconds</p>
                     <ul>
                         {question.options.map((option, index) => (
                             <li key={index}>
@@ -58,21 +95,25 @@ function App() {
                                         value={option}
                                         checked={answer === option}
                                         onChange={() => setAnswer(option)}
+                                        disabled={hasAnswered}
                                     />
                                     {option}
                                 </label>
                             </li>
                         ))}
                     </ul>
-                    <button onClick={handleAnswerSubmit}>
+                    <button onClick={handleAnswerSubmit} disabled={hasAnswered}>
                         Enviar Respuesta
                     </button>
                     <button onClick={handleNextQuestion}>
                         Siguiente Pregunta
                     </button>
                     {showResult && isCorrect !== null && (
-                        <p>{isCorrect ? 'Correcto!' : 'Incorrecto!'}</p>
+                        <p className={isCorrect ? 'correct' : 'incorrect'}>
+                            {isCorrect ? 'Correcto!' : 'Incorrecto!'}
+                        </p>
                     )}
+                    <p>Score: {score}</p>
                 </>
             ) : (
                 <p>Esperando siguiente pregunta...</p>

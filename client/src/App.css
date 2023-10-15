@@ -51,6 +51,14 @@ p.result {
     color: #28a745;
 }
 
+p.correct {
+    color: #28a745;
+}
+
+p.incorrect {
+    color: #dc3545;
+}
+
 @media (max-width: 768px) {
     h1 {
         font-size: 20px;
