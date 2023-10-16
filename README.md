@@ -12,7 +12,7 @@ This is a Trivia Quiz App that allows users to answer random trivia questions. T
 
 - **Front-end**: React
 - **Back-end**: Node.js
-- **Styling**: CSS and Bootstrap
+- **Styling**: CSS
 - **Routing**: React Router
 - **HTTP Requests**: WebSocket
 
