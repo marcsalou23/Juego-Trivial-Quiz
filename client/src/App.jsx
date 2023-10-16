@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import './App.css';
+import imageSrc from './Pxj9.gif';
 
 function App() {
     const [question, setQuestion] = useState(null);
@@ -87,11 +88,14 @@ function App() {
 
     return (
         <div className='App'>
+            <img src={imageSrc} alt='Your Image' className='top-right-image' />
             {question ? (
                 <>
                     <h1 className='quiz-title'>Trivial Quiz</h1>
-                    <p>{question.text}</p>
-                    <p>Tiempo restante: {timeLeft} seconds</p>
+                    <p className='light-brown-background'>{question.text}</p>
+                    <p className='light-brown-background'>
+                        Tiempo restante: {timeLeft} segundos
+                    </p>
                     <ul>
                         {question.options.map((option, index) => (
                             <li key={index}>

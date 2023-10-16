@@ -4,6 +4,14 @@
     font-family: Arial, sans-serif;
 }
 
+.top-right-image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: auto;
+}
+
 h1 {
     font-size: 24px;
     color: #333;
