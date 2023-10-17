@@ -1,6 +1,6 @@
 # Trivia Quiz App
 
-This is a Trivia Quiz App that allows users to answer random trivia questions. The app is built using React for the front-end and Node.js for the back-end. It provides an engaging and fun way for users to test their knowledge across various categories.
+This is a Trivia Quiz App that allows users to answer random trivia questions. The app is built using React for the front-end and Node.js for the back-end. It provides an engaging and fun way for users to test their knowledge.
 
 ## Features
 
