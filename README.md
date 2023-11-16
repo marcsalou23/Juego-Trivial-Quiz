@@ -1,5 +1,7 @@
 # Aplicación de Trivia Quiz
 
+![](https://s1.gifyu.com/images/SRNwU.gif)
+https://s1.gifyu.com/images/SRNwU.gif
 Esta es una aplicación de Trivia Quiz que permite a los usuarios responder preguntas de trivia al azar. La aplicación está construida utilizando React para el front-end y Node.js para el back-end. Proporciona una manera atractiva y divertida para que los usuarios pongan a prueba sus conocimientos.
 
 ## Características
