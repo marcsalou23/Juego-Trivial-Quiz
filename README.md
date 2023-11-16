@@ -1,18 +1,17 @@
-# Trivia Quiz App
+# Aplicación de Trivia Quiz
 
-This is a Trivia Quiz App that allows users to answer random trivia questions. The app is built using React for the front-end and Node.js for the back-end. It provides an engaging and fun way for users to test their knowledge.
+Esta es una aplicación de Trivia Quiz que permite a los usuarios responder preguntas de trivia al azar. La aplicación está construida utilizando React para el front-end y Node.js para el back-end. Proporciona una manera atractiva y divertida para que los usuarios pongan a prueba sus conocimientos.
 
-## Features
+## Características
 
-- Random trivia questions: The app fetches the questions from the build-in server
-- Timer: Each question has a timer, and users must answer within the given time limit. (In progress)
-- Score tracking: Users can see their current score and track their progress as they answer questions. (In progress)
- 
-## Technologies Used
+- Preguntas de trivia al azar: La aplicación obtiene las preguntas del servidor integrado.
+- Temporizador: Cada pregunta tiene un temporizador y los usuarios deben responder dentro del límite de tiempo establecido. (En progreso)
+- Seguimiento de puntuación: Los usuarios pueden ver su puntuación actual y seguir su progreso mientras responden preguntas. (En progreso)
+
+## Tecnologías Utilizadas
 
 - **Front-end**: React
 - **Back-end**: Node.js
-- **Styling**: CSS
-- **Routing**: React Router
-- **HTTP Requests**: WebSocket
-
+- **Estilos**: CSS
+- **Enrutamiento**: React Router
+- **Peticiones HTTP**: WebSocket
